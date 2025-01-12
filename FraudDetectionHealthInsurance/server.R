@@ -17,20 +17,16 @@ library(modeltime)
 library(timetk)
 library(lubridate)
 library(shinymanager)
-library(ChainLadder)
+# library(ChainLadder)
 library(xtable)
 # library(shinyauthr)
 # library(tidyverse)
 # library(glmnet)
 # library(randomForest)
 
-# setwd("C:\\Users\\a_didar\\Dropbox\\PC\\Documents\\SHARE\\DataBaseApp\\DayDataBase")
 
-# PIN_FOLDER = board_folder("DayDataBase",versioned = FALSE)
-# # PIN_FOLDER |> pin_write( KhatamDetail )
-# KhatamDetail = PIN_FOLDER |> pin_read(  'KhatamDetail' )
 #
-KhatamDetail <- read_excel("Khatam.xlsx")
+DataDetail <- read_excel("Data-Test.xlsx")
 
 
 Cover_Service <- read_excel("Cover_Service.xlsx")
@@ -68,7 +64,7 @@ server <- function(input, output, session) {
     
     Statistics_report_reac <- eventReactive(
         input$run,
-        KhatamDetail |>
+        DataDetail |>
             filter((EventDate >= input$TimeStart & EventDate <= input$TimeEnd) &
                        (Age >= input$Age[1] & Age <= input$Age[2]) &
                        (RequestAmount >= as.numeric(input$MinRequestAmount) & RequestAmount <= as.numeric(input$MaxRequestAmount)) &
@@ -115,10 +111,10 @@ server <- function(input, output, session) {
     #-------------------------------------------------------------------------------
     Statistics_report_CodeMeli_reac <- reactive(
         if (nchar(input$CodeMeliAsli) == 0) {
-            KhatamDetail |>
+            DataDetail |>
                 filter(NationalCode == input$CodeMeli)
         } else {
-            KhatamDetail |>
+            DataDetail |>
                 filter(MainInsuredNathionalNumber == input$CodeMeliAsli)
         }
     )
@@ -165,7 +161,7 @@ server <- function(input, output, session) {
     
     Khatam_summary <- eventReactive(
         input$RUN_STATISTICS_COVERAGE,
-        KhatamDetail |>
+        DataDetail |>
             filter((EventDate >= input$STATISTIC_COVERAGE_TimeStart & EventDate <= input$STATISTIC_COVERAGE_TimeEnd) &
                        CoverageName %in% input$STATISTIC_COVERAGE) |>
             group_by(CoverageName) |>
@@ -269,7 +265,7 @@ server <- function(input, output, session) {
     Khatam_summary_Services <- eventReactive(
         input$RUN_STATISTICS_Services,
         if (input$STATISTICS_Service == "All Services") {
-            KhatamDetail |>
+            DataDetail |>
                 filter((EventDate >= input$STATISTIC_Services_TimeStart & EventDate <= input$STATISTIC_Services_TimeEnd)) |>
                 group_by(ServiceGroupName) |>
                 summarise(
@@ -281,7 +277,7 @@ server <- function(input, output, session) {
                 ) |>
                 na.omit()
         } else {
-            KhatamDetail |>
+            DataDetail |>
                 filter((EventDate >= input$STATISTIC_Services_TimeStart & EventDate <= input$STATISTIC_Services_TimeEnd) &
                            ServiceGroupName %in% input$STATISTICS_Service) |>
                 group_by(ServiceGroupName) |>
@@ -392,7 +388,7 @@ server <- function(input, output, session) {
     
     Fraud_tab1_Report_1 <- eventReactive(
         input$run_Fraud_tab1_1,
-        KhatamDetail |>
+        DataDetail |>
             filter(EventDate >= input$TimeStart_Fraud_tab1_1 & EventDate <= input$TimeEnd_Fraud_tab1_1) |>
             group_by(NationalCode) |>
             summarise(
@@ -441,7 +437,7 @@ server <- function(input, output, session) {
     #-------------------------------------------------------------------------------  
     Fraud_tab1_Report_2 <- eventReactive(
         input$run_Fraud_tab1_2,
-        KhatamDetail |>
+        DataDetail |>
             filter(
                 EventDate >= input$TimeStart_Fraud_tab1_2 & EventDate <= input$TimeEnd_Fraud_tab1_2,
                 CoverageName %in% input$Coverage_Fraud_tab1_2
@@ -492,7 +488,7 @@ server <- function(input, output, session) {
     #-------------------------------------------------------------------------------  
     Fraud_tab1_Report_3 <- eventReactive(
         input$run_Fraud_tab1_3,
-        KhatamDetail |>
+        DataDetail |>
             filter(
                 EventDate >= input$TimeStart_Fraud_tab1_3 & EventDate <= input$TimeEnd_Fraud_tab1_3,
                 ServiceGroupName %in% input$Coverage_Fraud_tab1_3
@@ -554,7 +550,7 @@ server <- function(input, output, session) {
     
     Fraud_tab2_Report_1 <- eventReactive(
         input$run_Fraud_tab2_1,
-        KhatamDetail |>
+        DataDetail |>
             filter((EventDate >= input$TimeStart_Fraud_tab2_1 & EventDate <= input$TimeEnd_Fraud_tab2_1) &
                        (CoverageName == A2()[1] & Age <= 2) |
                        (CoverageName == A2()[2] & Age <= 15) |
@@ -617,7 +613,7 @@ server <- function(input, output, session) {
     
     Fraud_tab2_Report_2 <- eventReactive(
         input$run_Fraud_tab2_2,
-        KhatamDetail |>
+        DataDetail |>
             filter((EventDate >= input$TimeStart_Fraud_tab2_2 & EventDate <= input$TimeEnd_Fraud_tab2_2) &
                        (CoverageName == A3()[1] & Gender == "Male") |
                        (ServiceGroupName == A3()[2] & Gender == "Male") |
@@ -666,7 +662,7 @@ server <- function(input, output, session) {
     
     SD_Coverage <- eventReactive(
         input$run_Fraud_tab4_1,
-        KhatamDetail |>
+        DataDetail |>
             filter(CoverageName %in% input$Coverage_Fraud_tab4_1) |>
             group_by(CoverageName) |>
             summarise(SD = round(sd(PayableAmount)))
@@ -675,7 +671,7 @@ server <- function(input, output, session) {
     
     Fraud_tab4_Report_1 <- eventReactive(
         input$run_Fraud_tab4_1,
-        KhatamDetail |>
+        DataDetail |>
             filter((EventDate >= input$TimeStart_Fraud_tab4_1 & EventDate <= input$TimeEnd_Fraud_tab4_1) &
                        (CoverageName %in% input$Coverage_Fraud_tab4_1)) |>
             group_by(NationalCode, CoverageName) |>
@@ -721,7 +717,7 @@ server <- function(input, output, session) {
     
     SD_Service <- eventReactive(
         input$run_Fraud_tab4_2,
-        KhatamDetail |>
+        DataDetail |>
             filter(ServiceGroupName %in% input$Service_Fraud_tab4_2) |>
             group_by(ServiceGroupName) |>
             summarise(SD = round(sd(PayableAmount)))
@@ -729,7 +725,7 @@ server <- function(input, output, session) {
     
     Fraud_tab4_Report_2 <- eventReactive(
         input$run_Fraud_tab4_2,
-        KhatamDetail |>
+        DataDetail |>
             filter((EventDate >= input$TimeStart_Fraud_tab4_2 & EventDate <= input$TimeEnd_Fraud_tab4_2) &
                        (ServiceGroupName %in% input$Service_Fraud_tab4_2)) |>
             group_by(NationalCode, ServiceGroupName) |>

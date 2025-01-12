@@ -13,11 +13,8 @@ library(plotly)
 library(shinymanager)
 # library(bslib)
 
-# PIN_FOLDER <- board_folder("DayDataBase", versioned = FALSE)
-# # PIN_FOLDER |> pin_write( KhatamDetail )
-# z
 
-KhatamDetail <- read_excel("Khatam.xlsx")
+DataDetail <- read_excel("Data-Test.xlsx")
 
 Cover_Service <- read_excel("Cover_Service.xlsx")
 COVERAGE <- sort(unique(Cover_Service$CoverageName))
@@ -76,7 +73,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                      
                      
                      
-                     navbarPage("Day Health Report",
+                     navbarPage("",
                                 inverse = TRUE,
                                 # theme = bs_theme(bootswatch = "minty"),
                                 theme = shinytheme("cerulean"),
@@ -97,8 +94,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          checkboxGroupInput(
                                                              inputId = "RemittanceType",
                                                              label = "",
-                                                             choices = unique(KhatamDetail$RemittanceType),
-                                                             selected = unique(KhatamDetail$RemittanceType)[1]
+                                                             choices = unique(DataDetail$RemittanceType),
+                                                             selected = unique(DataDetail$RemittanceType)[1]
                                                          )
                                                      ),
                                                      column(4,
@@ -108,8 +105,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                             selectInput(
                                                                 inputId = "elatkosor",
                                                                 label = "",
-                                                                choices = unique(KhatamDetail$Deduction_Cause),
-                                                                selected = unique(KhatamDetail$Deduction_Cause)[4],
+                                                                choices = unique(DataDetail$Deduction_Cause),
+                                                                selected = unique(DataDetail$Deduction_Cause)[4],
                                                                 multiple = TRUE
                                                             )
                                                      )
@@ -121,7 +118,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                      sliderInput(
                                                          inputId = "Age",
                                                          label = "",
-                                                         min = min(KhatamDetail$Age), max = max(KhatamDetail$Age),
+                                                         min = min(DataDetail$Age), max = max(DataDetail$Age),
                                                          value = c(10, 55), step = 1
                                                      )
                                                  )),
@@ -133,8 +130,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                             selectInput(
                                                                 inputId = "Coverage",
                                                                 label = "",
-                                                                choices = unique(KhatamDetail$CoverageName),
-                                                                selected = unique(KhatamDetail$CoverageName)[1],
+                                                                choices = unique(DataDetail$CoverageName),
+                                                                selected = unique(DataDetail$CoverageName)[1],
                                                                 multiple = TRUE,
                                                                 width = "420px"
                                                             )
@@ -148,8 +145,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                             selectInput(
                                                                 inputId = "City",
                                                                 label = "",
-                                                                choices = unique(KhatamDetail$City),
-                                                                selected = unique(KhatamDetail$City)[1],
+                                                                choices = unique(DataDetail$City),
+                                                                selected = unique(DataDetail$City)[1],
                                                                 multiple = TRUE,
                                                                 width = "420px"
                                                             )
@@ -164,7 +161,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          textInput(
                                                              inputId = "TimeStart",
                                                              label = "From:",
-                                                             value = min(KhatamDetail$EventDate),
+                                                             value = min(DataDetail$EventDate),
                                                              width = "150px"
                                                          )
                                                      ),
@@ -173,7 +170,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                             textInput(
                                                                 inputId = "TimeEnd",
                                                                 label = "To:",
-                                                                value = max(KhatamDetail$EventDate),
+                                                                value = max(DataDetail$EventDate),
                                                                 width = "150px"
                                                             )
                                                      )
@@ -196,7 +193,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                             textInput(
                                                                 inputId = "MaxRequestAmount",
                                                                 label = "Max(Million Rial):",
-                                                                value = round(max(KhatamDetail$RequestAmount) / 10^3),
+                                                                value = round(max(DataDetail$RequestAmount) / 10^3),
                                                                 width = "300px"
                                                             )
                                                      )
@@ -206,8 +203,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                  selectInput(
                                                      inputId = "COLUMNS",
                                                      label = "",
-                                                     choices = names(KhatamDetail),
-                                                     selected = names(KhatamDetail),
+                                                     choices = names(DataDetail),
+                                                     selected = names(DataDetail),
                                                      multiple = TRUE,
                                                      width = "420px"
                                                  ),
@@ -274,7 +271,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          textInput(
                                                              inputId = "STATISTIC_COVERAGE_TimeStart",
                                                              label = "From:",
-                                                             value = min(KhatamDetail$EventDate),
+                                                             value = min(DataDetail$EventDate),
                                                              width = "150px"
                                                          )
                                                      ),
@@ -283,7 +280,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                             textInput(
                                                                 inputId = "STATISTIC_COVERAGE_TimeEnd",
                                                                 label = "To:",
-                                                                value = max(KhatamDetail$EventDate),
+                                                                value = max(DataDetail$EventDate),
                                                                 width = "150px"
                                                             )
                                                      )
@@ -295,8 +292,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          checkboxGroupInput(
                                                              inputId = "STATISTIC_COVERAGE",
                                                              label = "",
-                                                             choices = unique(KhatamDetail$CoverageName),
-                                                             selected = unique(KhatamDetail$CoverageName),
+                                                             choices = unique(DataDetail$CoverageName),
+                                                             selected = unique(DataDetail$CoverageName),
                                                              inline = FALSE
                                                          )
                                                  ),
@@ -333,7 +330,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                          textInput(
                                                              inputId = "STATISTIC_Services_TimeStart",
                                                              label = "From:",
-                                                             value = min(KhatamDetail$EventDate),
+                                                             value = min(DataDetail$EventDate),
                                                              width = "150px"
                                                          )
                                                      ),
@@ -342,7 +339,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                             textInput(
                                                                 inputId = "STATISTIC_Services_TimeEnd",
                                                                 label = "To:",
-                                                                value = max(KhatamDetail$EventDate),
+                                                                value = max(DataDetail$EventDate),
                                                                 width = "150px"
                                                             )
                                                      )
@@ -354,8 +351,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                         selectInput(
                                                             inputId = "STATISTICS_Service",
                                                             label = "",
-                                                            choices = c("All Services", unique(KhatamDetail$ServiceGroupName)),
-                                                            selected = c("All Services", unique(KhatamDetail$ServiceGroupName))[1],
+                                                            choices = c("All Services", unique(DataDetail$ServiceGroupName)),
+                                                            selected = c("All Services", unique(DataDetail$ServiceGroupName))[1],
                                                             multiple = TRUE
                                                         )
                                                         
@@ -417,7 +414,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     textInput(
                                                                         inputId = "TimeStart_Fraud_tab1_1",
                                                                         label = "From Date:",
-                                                                        value = min((KhatamDetail$EventDate)),
+                                                                        value = min((DataDetail$EventDate)),
                                                                         width = "150px"
                                                                     )
                                                                 ),
@@ -426,7 +423,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                        textInput(
                                                                            inputId = "TimeEnd_Fraud_tab1_1",
                                                                            label = "To Date:",
-                                                                           value = max(KhatamDetail$EventDate),
+                                                                           value = max(DataDetail$EventDate),
                                                                            width = "150px"
                                                                        )
                                                                 ),
@@ -473,7 +470,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     textInput(
                                                                         inputId = "TimeStart_Fraud_tab1_2",
                                                                         label = "From Date:",
-                                                                        value = min((KhatamDetail$EventDate)),
+                                                                        value = min((DataDetail$EventDate)),
                                                                         width = "150px"
                                                                     )
                                                                 ),
@@ -482,7 +479,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                        textInput(
                                                                            inputId = "TimeEnd_Fraud_tab1_2",
                                                                            label = "To Date:",
-                                                                           value = max(KhatamDetail$EventDate),
+                                                                           value = max(DataDetail$EventDate),
                                                                            width = "150px"
                                                                        )
                                                                 ),
@@ -501,8 +498,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     selectInput(
                                                                         inputId = "Coverage_Fraud_tab1_2",
                                                                         label = "",
-                                                                        choices = unique(KhatamDetail$CoverageName),
-                                                                        selected = unique(KhatamDetail$CoverageName)[1],
+                                                                        choices = unique(DataDetail$CoverageName),
+                                                                        selected = unique(DataDetail$CoverageName)[1],
                                                                         multiple = TRUE,
                                                                         width = "420px"
                                                                     )
@@ -540,7 +537,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     textInput(
                                                                         inputId = "TimeStart_Fraud_tab1_3",
                                                                         label = "From Date:",
-                                                                        value = min((KhatamDetail$EventDate)),
+                                                                        value = min((DataDetail$EventDate)),
                                                                         width = "150px"
                                                                     )
                                                                 ),
@@ -549,7 +546,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                        textInput(
                                                                            inputId = "TimeEnd_Fraud_tab1_3",
                                                                            label = "To Date:",
-                                                                           value = max(KhatamDetail$EventDate),
+                                                                           value = max(DataDetail$EventDate),
                                                                            width = "150px"
                                                                        )
                                                                 ),
@@ -568,8 +565,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     selectInput(
                                                                         inputId = "Coverage_Fraud_tab1_3",
                                                                         label = "",
-                                                                        choices = unique(KhatamDetail$ServiceGroupName),
-                                                                        selected = unique(KhatamDetail$ServiceGroupName)[1],
+                                                                        choices = unique(DataDetail$ServiceGroupName),
+                                                                        selected = unique(DataDetail$ServiceGroupName)[1],
                                                                         multiple = TRUE,
                                                                         width = "420px"
                                                                     )
@@ -614,7 +611,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     textInput(
                                                                         inputId = "TimeStart_Fraud_tab2_1",
                                                                         label = "From Date:",
-                                                                        value = min((KhatamDetail$EventDate)),
+                                                                        value = min((DataDetail$EventDate)),
                                                                         width = "150px"
                                                                     )
                                                                 ),
@@ -623,7 +620,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                        textInput(
                                                                            inputId = "TimeEnd_Fraud_tab2_1",
                                                                            label = "To Date:",
-                                                                           value = max(KhatamDetail$EventDate),
+                                                                           value = max(DataDetail$EventDate),
                                                                            width = "150px"
                                                                        )
                                                                 ),
@@ -661,7 +658,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     textInput(
                                                                         inputId = "TimeStart_Fraud_tab2_2",
                                                                         label = "From Date:",
-                                                                        value = min((KhatamDetail$EventDate)),
+                                                                        value = min((DataDetail$EventDate)),
                                                                         width = "150px"
                                                                     )
                                                                 ),
@@ -670,7 +667,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                        textInput(
                                                                            inputId = "TimeEnd_Fraud_tab2_2",
                                                                            label = "To Date:",
-                                                                           value = max(KhatamDetail$EventDate),
+                                                                           value = max(DataDetail$EventDate),
                                                                            width = "150px"
                                                                        )
                                                                 ),
@@ -716,7 +713,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     textInput(
                                                                         inputId = "TimeStart_Fraud_tab4_1",
                                                                         label = "From Date:",
-                                                                        value = min((KhatamDetail$EventDate)),
+                                                                        value = min((DataDetail$EventDate)),
                                                                         width = "350px"
                                                                     )
                                                                 ),
@@ -725,7 +722,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                        textInput(
                                                                            inputId = "TimeEnd_Fraud_tab4_1",
                                                                            label = "To Date:",
-                                                                           value = max(KhatamDetail$EventDate),
+                                                                           value = max(DataDetail$EventDate),
                                                                            width = "350px"
                                                                        )
                                                                 ),
@@ -745,8 +742,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     selectInput(
                                                                         inputId = "Coverage_Fraud_tab4_1",
                                                                         label = "Coverage",
-                                                                        choices = unique(KhatamDetail$CoverageName),
-                                                                        selected = unique(KhatamDetail$CoverageName)[1],
+                                                                        choices = unique(DataDetail$CoverageName),
+                                                                        selected = unique(DataDetail$CoverageName)[1],
                                                                         multiple = TRUE,
                                                                         width = "420px"
                                                                     )
@@ -774,7 +771,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     textInput(
                                                                         inputId = "TimeStart_Fraud_tab4_2",
                                                                         label = "From Date:",
-                                                                        value = min((KhatamDetail$EventDate)),
+                                                                        value = min((DataDetail$EventDate)),
                                                                         width = "350px"
                                                                     )
                                                                 ),
@@ -783,7 +780,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                        textInput(
                                                                            inputId = "TimeEnd_Fraud_tab4_2",
                                                                            label = "To Date:",
-                                                                           value = max(KhatamDetail$EventDate),
+                                                                           value = max(DataDetail$EventDate),
                                                                            width = "350px"
                                                                        )
                                                                 ),
@@ -803,8 +800,8 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                                     selectInput(
                                                                         inputId = "Service_Fraud_tab4_2",
                                                                         label = "Service",
-                                                                        choices = unique(KhatamDetail$ServiceGroupName),
-                                                                        selected = unique(KhatamDetail$ServiceGroupName)[1],
+                                                                        choices = unique(DataDetail$ServiceGroupName),
+                                                                        selected = unique(DataDetail$ServiceGroupName)[1],
                                                                         multiple = TRUE,
                                                                         width = "420px"
                                                                     )
@@ -847,7 +844,7 @@ ui <- secure_app(head_auth = tags$script(inactivity),
                                                    actionButton(
                                                        inputId = "ab1", label = "ع©ظ„غŒع© ع©ظ†غŒط¯",
                                                        icon = icon("brain"),
-                                                       onclick = "window.open('https://budgetrealizationdayinsurance.shinyapps.io/Model_Predictive/', '_blank')"
+                                                       onclick = "window.open('https://budgetrealizationshinyapps.io/Model_Predictive/', '_blank')"
                                                    ),
                                                    style = "font-size: 25px;text-align:center;font-family: B Mitra;color:black;background-color:turquoise;padding:15px;border-radius:10px"
                                                  )
